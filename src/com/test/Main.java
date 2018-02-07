@@ -20,14 +20,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        String driver ="com.mysql.jdbc.Driver";
-        String url ="jdbc:mysql://rm-wz93gvt9eu4a5ac14vo.mysql.rds.aliyuncs.com/db_order?useUnicode=true&characterEncoding=utf-8";
-        String user = "root_junyi";
-        String password ="root@junyi123456";
-        String tableName = "dt_order";
-//        String tableName = "dt_order_deliver";
-        String className = "OrderDeliver";
-        String packageName = "com.test.order";
+
 
 
         try {
