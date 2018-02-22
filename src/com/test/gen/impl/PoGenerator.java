@@ -29,9 +29,9 @@ public class PoGenerator implements Generator {
         appendGetSetMethod();
         appendFinish();
 
-        System.out.println("begin to generator po file ...");
+        System.out.println("Generate po file Begin ...");
         FileUtils.writeFile(table.getJavaClassName() + ".java", sb.toString());
-        System.out.println("end to generator po file ...");
+        System.out.println("Generate po file End ...");
 
     }
 

@@ -31,9 +31,9 @@ public class MapperGenerator implements Generator {
         appendUpdateById();
         appendFinish();
 
-        System.out.println("begin to generator po file ...");
+        System.out.println("Generate po file Begin...");
         FileUtils.writeFile(table.getJavaClassName() + "Mapper.java", sb.toString());
-        System.out.println("end to generator po file ...");
+        System.out.println("Generate po file End...");
 
     }
 

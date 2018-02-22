@@ -1,6 +1,7 @@
 package com.test.db;
 
 import com.test.common.types.JdbcTypeJavaTypeNameTranslator;
+import com.test.common.types.JdbcTypeNameTranslator;
 import com.test.common.util.JavaBeansUtil;
 import com.test.model.Column;
 import com.test.model.Table;
@@ -130,7 +131,9 @@ public class TableTool {
             col.setColumnName(columnSet.getString("COLUMN_NAME"));
             col.setColumnComment(columnSet.getString("REMARKS"));
             col.setJdbcType(Integer.parseInt(columnSet.getString("DATA_TYPE")));
-            col.setJdbcTypeName(columnSet.getString("TYPE_NAME"));
+//            col.setJdbcTypeName(columnSet.getString("TYPE_NAME"));
+            col.setJdbcTypeName(JdbcTypeNameTranslator.getJdbcTypeName(col.getJdbcType()));
+
             col.setJavaPropertyName(JavaBeansUtil.getCamelCaseString(col.getColumnName(), false));
             col.setJavaPropertyType(JdbcTypeJavaTypeNameTranslator.getJavaClassName(col.getJdbcType()));
 

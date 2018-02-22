@@ -40,7 +40,10 @@ public class JdbcTypeNameTranslator {
         typeToName.put(Types.CHAR, "CHAR"); //$NON-NLS-1$
         typeToName.put(Types.CLOB, "CLOB"); //$NON-NLS-1$
         typeToName.put(Types.DATALINK, "DATALINK"); //$NON-NLS-1$
-        typeToName.put(Types.DATE, "DATE"); //$NON-NLS-1$
+
+//        typeToName.put(Types.DATE, "DATE"); //$NON-NLS-1$
+        typeToName.put(Types.DATE, "TIMESTAMP"); //$NON-NLS-1$
+
         typeToName.put(Types.DECIMAL, "DECIMAL"); //$NON-NLS-1$
         typeToName.put(Types.DISTINCT, "DISTINCT"); //$NON-NLS-1$
         typeToName.put(Types.DOUBLE, "DOUBLE"); //$NON-NLS-1$
@@ -61,7 +64,10 @@ public class JdbcTypeNameTranslator {
         typeToName.put(Types.SMALLINT, "SMALLINT"); //$NON-NLS-1$
         typeToName.put(Types.STRUCT, "STRUCT"); //$NON-NLS-1$
         typeToName.put(Types.TIME, "TIME"); //$NON-NLS-1$
+
+//        typeToName.put(Types.TIMESTAMP, "TIMESTAMP"); //$NON-NLS-1$
         typeToName.put(Types.TIMESTAMP, "TIMESTAMP"); //$NON-NLS-1$
+
         typeToName.put(Types.TINYINT, "TINYINT"); //$NON-NLS-1$
         typeToName.put(Types.VARBINARY, "VARBINARY"); //$NON-NLS-1$
         typeToName.put(Types.VARCHAR, "VARCHAR"); //$NON-NLS-1$

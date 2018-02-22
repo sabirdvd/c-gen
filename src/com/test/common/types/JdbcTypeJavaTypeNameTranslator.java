@@ -57,7 +57,7 @@ public class JdbcTypeJavaTypeNameTranslator {
         jdbcTypeToJavaClassName.put(Types.SMALLINT, "Integer"); //$NON-NLS-1$
 
         jdbcTypeToJavaClassName.put(Types.TIME, "Date"); //$NON-NLS-1$
-        jdbcTypeToJavaClassName.put(Types.TIMESTAMP, "Timestamp"); //$NON-NLS-1$
+        jdbcTypeToJavaClassName.put(Types.TIMESTAMP, "Date"); //$NON-NLS-1$
 
         jdbcTypeToJavaClassName.put(Types.TINYINT, "Integer"); //$NON-NLS-1$
         jdbcTypeToJavaClassName.put(Types.VARCHAR, "String"); //$NON-NLS-1$

@@ -24,6 +24,7 @@ public class XmlGenerator implements Generator {
 
         appendBegin();
         appendResultMap();
+        appendWhereParams();
         appendUpdateSetColumns();
         appendInsert();
         appendGet();
@@ -33,9 +34,9 @@ public class XmlGenerator implements Generator {
         appendUpdateById();
         appendFinish();
 
-        System.out.println("begin to generator xml file ...");
+        System.out.println("Generate xml file Begin...");
         FileUtils.writeFile(table.getJavaClassName() + "Mapper.xml", sb.toString());
-        System.out.println("end to generator xml file ...");
+        System.out.println("Generate xml file End...");
 
     }
 
@@ -109,11 +110,42 @@ public class XmlGenerator implements Generator {
             sb.append("</if>\n");
         }
 
-        sb.append("\t\t<set/>\n");
-        sb.append("\t</resultMap>\n\n");
+        sb.append("\t\t</set>\n");
+        sb.append("\t</sql>\n\n");
 
     }
 
+
+    /**
+     * WhereParams
+     * @return
+     */
+    private void appendWhereParams() {
+        List<Column> columnList = table.getColumnList();
+        Column column;
+        String columnName;
+        String jdbcTypeName;
+        String javaPropertyName;
+        String javaPropertyParaName;
+
+        sb.append("\t<!-- 可能用于查询的条件参数, 给通用方法使用 -->\n");
+        sb.append("\t<sql id=\"WhereParams\">\n");
+
+        for (int i=0; i<columnList.size(); i++) {
+            column = columnList.get(i);
+            columnName = column.getColumnName();
+            jdbcTypeName = column.getJdbcTypeName();
+            javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
+
+            sb.append("\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
+            sb.append("AND ").append(columnName).append(" = #{ p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("</if>\n");
+        }
+
+        sb.append("\t</sql>\n\n");
+
+    }
 
 
     /**
@@ -129,10 +161,11 @@ public class XmlGenerator implements Generator {
 
         sb.append("\t<!-- 插入数据-单条 -->\n");
         sb.append("\t<insert id=\"insert").append(table.getJavaClassName());
-        sb.append("\" useGeneratedKey=\"true\" keyProperty=\"");
+        sb.append("\" useGeneratedKeys=\"true\" keyProperty=\"");
         sb.append(column.getJavaPropertyName());
         sb.append("\" parameterType=\"").append(table.getJavaClassFullName()).append("\">\n");
         sb.append("\t\tinsert into ").append(table.getTableName()).append(" (\n");
+        sb.append("\t\t<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">\n");
 
 
         for (int i=0; i<columnList.size(); i++) {
@@ -145,7 +178,8 @@ public class XmlGenerator implements Generator {
             sb.append(columnName).append(", </if>\n");
         }
 
-        sb.append("\t\t)values(\n");
+        sb.append("\t\t</trim>\n");
+        sb.append("\t\t<trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">\n");
 
         for (int i=0; i<columnList.size(); i++) {
             column = columnList.get(i);
@@ -157,6 +191,7 @@ public class XmlGenerator implements Generator {
             sb.append(" #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("},</if>\n");
         }
 
+        sb.append("\t\t</trim>\n");
         sb.append("\t</insert>\n\n");
     }
 
@@ -170,9 +205,11 @@ public class XmlGenerator implements Generator {
         String columnName;
         String jdbcTypeName;
         String javaPropertyName;
+        String javaPropertyParaName;
+
 
         sb.append("\t<!-- 通用查询方法 -->\n");
-        sb.append("\t<select id=\"get").append(table.getJavaClassName()).append("\" parameterType=\"java.util.Map\" resultMap=\"BaseResultMap\">\n");
+        sb.append("\t<select id=\"get").append(table.getJavaClassName()).append("\" parameterType=\"map\" resultMap=\"BaseResultMap\">\n");
         sb.append("\t\tSELECT\n");
         sb.append("\t\t\t").append(column.getColumnName()).append("\n");
         for (int i=1; i<columnList.size(); i++) {
@@ -188,9 +225,10 @@ public class XmlGenerator implements Generator {
             columnName = column.getColumnName();
             jdbcTypeName = column.getJdbcTypeName();
             javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
-            sb.append("\t\t\t<if test=\"").append(javaPropertyName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
+            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
             sb.append("</if>\n");
 
         }
@@ -209,9 +247,11 @@ public class XmlGenerator implements Generator {
         String columnName;
         String jdbcTypeName;
         String javaPropertyName;
+        String javaPropertyParaName;
+
 
         sb.append("\t<!-- 查数量 -->\n");
-        sb.append("\t<select id=\"count").append(table.getJavaClassName()).append("\" parameterType=\"java.util.Map\" resultMap=\"java.lang.Integer\">\n");
+        sb.append("\t<select id=\"count").append(table.getJavaClassName()).append("\" parameterType=\"map\" resultType=\"int\">\n");
         sb.append("\t\tSELECT count(*)\n");
         sb.append("\t\tFROM ").append(table.getTableName()).append("\n");
         sb.append("\t\tWHERE 1=1\n");
@@ -222,9 +262,10 @@ public class XmlGenerator implements Generator {
             columnName = column.getColumnName();
             jdbcTypeName = column.getJdbcTypeName();
             javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
-            sb.append("\t\t\t<if test=\"").append(javaPropertyName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
+            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
             sb.append("</if>\n");
         }
 
@@ -241,11 +282,13 @@ public class XmlGenerator implements Generator {
         String columnName;
         String jdbcTypeName;
         String javaPropertyName;
+        String javaPropertyParaName;
+
         String idColumnName = column.getColumnName();
 
         sb.append("\t<!-- 分页查询 -->\n");
 
-        sb.append("\t<select id=\"list").append(table.getJavaClassName()).append("\" parameterType=\"java.util.Map\" resultMap=\"BaseResultMap\">\n");
+        sb.append("\t<select id=\"list").append(table.getJavaClassName()).append("\" parameterType=\"map\" resultMap=\"BaseResultMap\">\n");
 
         sb.append("\t\tSELECT\n");
         sb.append("\t\t\ta.").append(column.getColumnName()).append("\n");
@@ -265,9 +308,10 @@ public class XmlGenerator implements Generator {
             columnName = column.getColumnName();
             jdbcTypeName = column.getJdbcTypeName();
             javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
-            sb.append("\t\t\t<if test=\"").append(javaPropertyName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
+            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("} ");
             sb.append("</if>\n");
         }
         sb.append("\t\t) b where a.").append(idColumnName).append(" = b.").append(idColumnName).append("\n");
