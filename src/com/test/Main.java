@@ -20,9 +20,31 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
+
         String driver ="com.mysql.jdbc.Driver";
+//        String url ="jdbc:mysql://rm-wz93gvt9eu4a5ac14vo.mysql.rds.aliyuncs.com/db_order?useUnicode=true&characterEncoding=utf-8";
+//        String user = "root_junyi";
+//        String password ="root@junyi123456";
 
+        String url ="jdbc:mysql://rm-wz9m8c1v6f01g7757io.mysql.rds.aliyuncs.com/db_cms?useUnicode=true&characterEncoding=utf-8";
+        String user = "root_junyi";
+        String password ="root@junyi123456";
 
+//        String tableName = "dt_order";
+////        String tableName = "dt_order_deliver";
+//        String className = "OrderDeliver";
+//        String packageName = "com.test.order";
+
+//        String tableName = "t_schedule_job";
+//        String className = "ScheduleJob";
+//        String packageName = "com.junyi.schedule";
+//        String tableName = "u_user";
+//        String className = "User";
+//        String packageName = "com.junyi.login";
+
+        String tableName = "t_message_push";
+        String className = "MessagePush";
+        String packageName = "com.junyi.message";
 
         try {
             // 加载驱动程序
