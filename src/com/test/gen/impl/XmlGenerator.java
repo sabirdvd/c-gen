@@ -25,6 +25,7 @@ public class XmlGenerator implements Generator {
         appendBegin();
         appendResultMap();
         appendWhereParams();
+        appendSelectColumns();
         appendUpdateSetColumns();
         appendInsert();
         appendGet();
@@ -83,6 +84,37 @@ public class XmlGenerator implements Generator {
     }
 
 
+
+    /**
+     * UpdateSetColumns
+     * @return
+     */
+    private void appendSelectColumns() {
+        List<Column> columnList = table.getColumnList();
+        Column column;
+        String columnName;
+        String jdbcTypeName;
+        String javaPropertyName;
+        String javaPropertyParaName;
+
+        sb.append("\t<!-- 动态查询字段, 给通用方法使用 -->\n");
+        sb.append("\t<sql id=\"SelectColumns\">\n");
+
+        for (int i=0; i<columnList.size(); i++) {
+            column = columnList.get(i);
+            columnName = column.getColumnName();
+            jdbcTypeName = column.getJdbcTypeName();
+            javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
+
+
+            sb.append("\t\t\t<if test=\"c").append(javaPropertyParaName).append(" == true\"> ");
+            sb.append(",").append(columnName);
+            sb.append("</if>\n");
+        }
+        sb.append("\t</sql>\n\n");
+
+    }
 
     /**
      * UpdateSetColumns
@@ -202,36 +234,18 @@ public class XmlGenerator implements Generator {
     private void appendGet() {
         List<Column> columnList = table.getColumnList();
         Column column = columnList.get(0);
-        String columnName;
-        String jdbcTypeName;
-        String javaPropertyName;
-        String javaPropertyParaName;
-
 
         sb.append("\t<!-- 通用查询方法 -->\n");
         sb.append("\t<select id=\"get").append(table.getJavaClassName()).append("\" parameterType=\"map\" resultMap=\"BaseResultMap\">\n");
         sb.append("\t\tSELECT\n");
         sb.append("\t\t\t").append(column.getColumnName()).append("\n");
-        for (int i=1; i<columnList.size(); i++) {
-            column = columnList.get(i);
-            sb.append("\t\t\t,").append(column.getColumnName()).append("\n");
+        sb.append("\t\t<include refid=\"SelectColumns\"/>\n");
 
-        }
 
         sb.append("\t\t FROM ").append(table.getTableName()).append("\n");
         sb.append("\t\t WHERE 1=1\n");
-        for (int i=1; i<columnList.size(); i++) {
-            column = columnList.get(i);
-            columnName = column.getColumnName();
-            jdbcTypeName = column.getJdbcTypeName();
-            javaPropertyName = column.getJavaPropertyName();
-            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
+        sb.append("\t\t<include refid=\"WhereParams\"/>\n");
 
-            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
-            sb.append("</if>\n");
-
-        }
 
         sb.append("\t</select>\n\n");
 
