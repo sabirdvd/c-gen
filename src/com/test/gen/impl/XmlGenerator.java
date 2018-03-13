@@ -279,7 +279,7 @@ public class XmlGenerator implements Generator {
             javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
             sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("}");
             sb.append("</if>\n");
         }
 
