@@ -74,3 +74,6 @@ build_all/war
 #####################
 /project/project
 /project/target
+
+#tmp
+/tmp
