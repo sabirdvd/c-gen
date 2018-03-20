@@ -77,3 +77,6 @@ build_all/war
 
 #tmp
 /tmp
+/src/com/test/Main.java
+/sh/cmd/server.ini
+/sh/remote/server.ini

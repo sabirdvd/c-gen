@@ -126,6 +126,7 @@ public class XmlGenerator implements Generator {
         String columnName;
         String jdbcTypeName;
         String javaPropertyName;
+        String javaPropertyParaName;
 
         sb.append("\t<!-- 可能更改的字段, 给通用方法使用 -->\n");
         sb.append("\t<sql id=\"UpdateSetColumns\">\n");
@@ -136,9 +137,11 @@ public class XmlGenerator implements Generator {
             columnName = column.getColumnName();
             jdbcTypeName = column.getJdbcTypeName();
             javaPropertyName = column.getJavaPropertyName();
+            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
-            sb.append("\t\t\t<if test=\"").append(javaPropertyName).append(" != null\"> ");
-            sb.append(columnName).append(" = #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("},");
+
+            sb.append("\t\t\t<if test=\"s").append(javaPropertyParaName).append(" != null\"> ");
+            sb.append(columnName).append(" = #{s").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
             sb.append("</if>\n");
         }
 
@@ -344,6 +347,7 @@ public class XmlGenerator implements Generator {
         String columnName = firstColumn.getColumnName();
         String jdbcTypeName = firstColumn.getJdbcTypeName();
         String javaPropertyName = firstColumn.getJavaPropertyName();
+        String javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
         String idColumnName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
         sb.append("\t<!-- 更新，通用方法 -->\n");
@@ -351,7 +355,7 @@ public class XmlGenerator implements Generator {
         sb.append(" parameterType=\"map\">\n");
         sb.append("\t\tupdate ").append(table.getTableName()).append("\n");
         sb.append("\t\t<include refid=\"UpdateSetColumns\"/>\n");
-        sb.append("\t\twhere ").append(columnName).append(" = #{").append(javaPropertyName).append(", jdbcType=").append(jdbcTypeName).append("}\n");
+        sb.append("\t\twhere ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("}\n");
         sb.append("\t</update>\n\n");
 
     }

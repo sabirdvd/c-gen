@@ -31,9 +31,18 @@ public class Main {
 //        String user = "root_junyi";
 //        String password ="root@junyi123456";
 
-        String tableName = "dt_order";
+//        String tableName = "dt_order";
+//        String className = "Order";
 //        String tableName = "dt_order_deliver";
-        String className = "Order";
+//        String className = "OrderDeliver";
+
+//        String tableName = "dt_order_goods";
+//        String className = "OrderGoods";
+
+        String tableName = "dt_order_rece_info";
+        String className = "OrderReceInfo";
+
+
         String packageName = "com.test.order";
 
 //        String tableName = "t_schedule_job";
