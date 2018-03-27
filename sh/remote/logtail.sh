@@ -73,6 +73,7 @@ esac
 ssh  $user@${outer_host} <<EOF
 tail -f $file_name
 exit
+EOF
 
 echo "------------------------------------------------------------------"
 echo "----------You Already Out??---------------------------------------"
