@@ -70,7 +70,7 @@ case $log_type in
 esac
 
 
-ssh  $user@${outer_host} <<EOF
+ssh -tt $user@${outer_host} <<EOF
 view $file_name
 exit
 EOF
