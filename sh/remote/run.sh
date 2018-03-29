@@ -59,9 +59,15 @@ case $program_type in
 esac
 
 
-ssh -tt $user@${outer_host} <<EOF
+ssh $user@${outer_host} <<EOF
 
 cd $command_dir && ./$command
+echo "run finished ,please check!"
 exit
+EOF
 
+./logtail.sh $1 $start_log_type
+
+echo $dash_line
 exit 0
+
