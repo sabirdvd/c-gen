@@ -28,6 +28,7 @@ public class XmlGenerator implements Generator {
         appendSelectColumns();
         appendUpdateSetColumns();
         appendInsert();
+        appendInsertList();
         appendGet();
         appendCount();
         appendList();
@@ -174,7 +175,7 @@ public class XmlGenerator implements Generator {
             javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
 
             sb.append("\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{ p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("},");
+            sb.append("AND ").append(columnName).append(" = #{ p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("}");
             sb.append("</if>\n");
         }
 
@@ -230,6 +231,46 @@ public class XmlGenerator implements Generator {
         sb.append("\t</insert>\n\n");
     }
 
+
+    /**
+     * insert
+     * @return
+     */
+    private void appendInsertList() {
+        List<Column> columnList = table.getColumnList();
+        Column column = columnList.get(0);
+        String columnName;
+        String jdbcTypeName;
+        String javaPropertyName;
+
+        sb.append("\t<!-- 插入数据-多条 -->\n");
+        sb.append("\t<insert id=\"insert").append(table.getJavaClassName()).append("List\" parameterType=\"list\">\n");
+        sb.append("\t\tinsert into ").append(table.getTableName()).append(" (\n");
+
+        for (int i=0; i<columnList.size(); i++) {
+            column = columnList.get(i);
+            columnName = column.getColumnName();
+            jdbcTypeName = column.getJdbcTypeName();
+            javaPropertyName = column.getJavaPropertyName();
+
+            sb.append("\t\t").append(columnName).append(",\n");
+        }
+
+        sb.append("\t\t)values\n");
+        sb.append("\t\t<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\">(\n");
+
+        for (int i=0; i<columnList.size(); i++) {
+            column = columnList.get(i);
+            columnName = column.getColumnName();
+            jdbcTypeName = column.getJdbcTypeName();
+            javaPropertyName = column.getJavaPropertyName();
+
+            sb.append("\t\t\t#{item.").append(javaPropertyName).append("},\n");
+        }
+
+        sb.append("\t\t)</foreach>\n");
+        sb.append("\t</insert>\n\n");
+    }
     /**
      * select
      * @return

@@ -21,15 +21,18 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-
         String driver ="com.mysql.jdbc.Driver";
-        String url ="jdbc:mysql://rm-wz94501i1tnp92492to.mysql.rds.aliyuncs.com/db_order?useUnicode=true&characterEncoding=utf-8";
-        String user = "root_junyi";
-        String password ="root@junyi123456";
 
-//        String url ="jdbc:mysql://rm-wz94501i1tnp92492to.mysql.rds.aliyuncs.com/db_cms?useUnicode=true&characterEncoding=utf-8";
+
+        //order
+//        String url ="jdbc:mysql://rm-wz94501i1tnp92492to.mysql.rds.aliyuncs.com/db_order?useUnicode=true&characterEncoding=utf-8";
 //        String user = "root_junyi";
 //        String password ="root@junyi123456";
+
+        //cms
+        String url ="jdbc:mysql://rm-wz9m8c1v6f01g7757io.mysql.rds.aliyuncs.com/db_cms?useUnicode=true&characterEncoding=utf-8";
+        String user = "root_junyi";
+        String password ="root@junyi123456";
 
 //        String tableName = "dt_order";
 //        String className = "Order";
@@ -39,9 +42,12 @@ public class Main {
 //        String tableName = "dt_order_goods";
 //        String className = "OrderGoods";
 
-        String tableName = "dt_order_rece_info";
-        String className = "OrderReceInfo";
+//        String tableName = "dt_order_rece_info";
+//        String className = "OrderReceInfo";
 
+        String tableName = "t_order_goods";
+        String className = "OrderGoods";
+//
 
         String packageName = "com.test.order";
 
