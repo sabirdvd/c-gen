@@ -253,7 +253,7 @@ public class XmlGenerator implements Generator {
             jdbcTypeName = column.getJdbcTypeName();
             javaPropertyName = column.getJavaPropertyName();
 
-            sb.append("\t\t").append(columnName).append(",\n");
+            sb.append("\t\t\t").append(columnName).append(",\n");
         }
 
         sb.append("\t\t)values\n");
