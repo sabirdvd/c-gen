@@ -6,9 +6,10 @@ import java.util.List;
 public class T1 {
     public static void main(String[] args) {
 
-        List<String> strList = new ArrayList<>();
-        strList.add("1");
-        strList.add("2");
-        System.out.println(strList.size());
+        boolean[] booleans = {true, false, true};
+        for (Boolean b: booleans){
+            System.out.println(b);
+        }
+        System.out.println(booleans);
     }
 }
