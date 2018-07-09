@@ -29,6 +29,7 @@ public class XmlGenerator implements Generator {
         appendUpdateSetColumns();
         appendInsert();
         appendInsertList();
+        appendGetById();
         appendGet();
         appendCount();
         appendList();
@@ -271,6 +272,31 @@ public class XmlGenerator implements Generator {
         sb.append("\t\t)</foreach>\n");
         sb.append("\t</insert>\n\n");
     }
+
+
+    /**
+     * select
+     * @return
+     */
+    private void appendGetById() {
+        List<Column> columnList = table.getColumnList();
+        Column column = columnList.get(0);
+
+        sb.append("\t<!-- 通过id查询 -->\n");
+        sb.append("\t<select id=\"get").append(table.getJavaClassName()).append("ById\" parameterType=\"long\" resultMap=\"BaseResultMap\">\n");
+        sb.append("\t\tSELECT\n");
+        sb.append("\t\t\t").append(column.getColumnName()).append("\n");
+        sb.append("\t\t<include refid=\"SelectColumns\"/>\n");
+
+
+        sb.append("\t\t FROM ").append(table.getTableName()).append("\n");
+        sb.append("\t\t WHERE id={pId}\n");
+
+
+        sb.append("\t</select>\n\n");
+
+    }
+
     /**
      * select
      * @return
@@ -313,20 +339,7 @@ public class XmlGenerator implements Generator {
         sb.append("\t\tSELECT count(*)\n");
         sb.append("\t\tFROM ").append(table.getTableName()).append("\n");
         sb.append("\t\tWHERE 1=1\n");
-
-
-        for (int i=0; i<columnList.size(); i++) {
-            column = columnList.get(i);
-            columnName = column.getColumnName();
-            jdbcTypeName = column.getJdbcTypeName();
-            javaPropertyName = column.getJavaPropertyName();
-            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
-
-            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("}");
-            sb.append("</if>\n");
-        }
-
+        sb.append("\t\t<include refid=\"WhereParams\"/>\n");
         sb.append("\t</select>\n\n");
     }
 
@@ -361,17 +374,8 @@ public class XmlGenerator implements Generator {
         sb.append("\t\tSELECT ").append(column.getColumnName()).append(" from ").append(table.getTableName()).append("\n");
         sb.append("\t\tWHERE 1=1\n");
 
-        for (int i=0; i<columnList.size(); i++) {
-            column = columnList.get(i);
-            columnName = column.getColumnName();
-            jdbcTypeName = column.getJdbcTypeName();
-            javaPropertyName = column.getJavaPropertyName();
-            javaPropertyParaName = JavaBeansUtil.getCamelCaseString(columnName, true);
+        sb.append("\t\t<include refid=\"WhereParams\"/>\n");
 
-            sb.append("\t\t\t<if test=\"p").append(javaPropertyParaName).append(" != null\"> ");
-            sb.append("AND ").append(columnName).append(" = #{p").append(javaPropertyParaName).append(", jdbcType=").append(jdbcTypeName).append("} ");
-            sb.append("</if>\n");
-        }
         sb.append("\t\t) b where a.").append(idColumnName).append(" = b.").append(idColumnName).append("\n");
 
         sb.append("\t</select>\n\n");
