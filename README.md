@@ -1,5 +1,7 @@
 # emacs shortcut
 
+ <img align="" width="" height="" src="keymap.JPEG"> 
+
 ## File 
 ```
 Ctrl+X, Ctrl+F <--- Open "f"ile
