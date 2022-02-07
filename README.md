@@ -1,6 +1,10 @@
 # emacs shortcut
 
  <img align="" width="" height="" src="keymap.JPEG"> 
+ 
+ <img align="" width="" height="" src="ctrl.JPEG">  
+ 
+ 
 
 ## File 
 ```
