@@ -21,7 +21,7 @@ Ctrl+X, Ctrl+V <--- Revert to File
 ```
 
 ```
-Meta+X < ---Revert Buffer
+Meta+X <--- Revert Buffer
 ```
 ```
 Ctrl+X, k <--- Close Window/Buffer
